@@ -1,0 +1,4 @@
+name: MultiEco
+version: '${project.version}'
+main: cat_std.broseidon.mtleco.MultiEco
+api-version: '1.19'
