@@ -32,12 +32,14 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
             // RELOAD COMMAND
             if (args[0].equalsIgnoreCase("reload")) {
                 if (!player.hasPermission("mtleco.eco.admin.reload")) {
+                    //TODO: Change message to message.yml
                     player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                     return true;
                 }
 
                 if (args.length == 1) {
                     plugin.reloadConfig();
+                    //TODO: Change message to message.yml
                     player.sendMessage(ChatColor.GREEN + "Reloaded config");
                 }
                 return true;
@@ -49,6 +51,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                     //CREATE COMMAND
                     if (args[1].equalsIgnoreCase("create")) {
                         if (!player.hasPermission("mtleco.eco.admin.create")) {
+                            //TODO: Change message to message.yml
                             player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                             return true;
                         }
@@ -64,6 +67,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                             if (!configSection.isConfigurationSection(economyID)) {
                                 plugin.getEconomyHandler().addEconomyImplementer(economyImplementer); // Add to EconomyHandler
                                 plugin.getVaultHook().singleHook(economyImplementer); // Hook into Vault
+                                //TODO: Change message to message.yml
                                 player.sendMessage(ChatColor.GRAY + "You have created a new economy called " + ChatColor.AQUA + economyImplementer.getIcon());
 
                                 // Create a section for the new currency
@@ -76,6 +80,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                                 plugin.saveConfig();
                                 plugin.reloadConfig();
                             } else {
+                                //TODO: Change message to message.yml
                                 player.sendMessage(ChatColor.RED + "Economy already exists");
                             }
                         } catch (Exception e) {
@@ -87,6 +92,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                     //DELETE COMMAND
                     if (args[1].equalsIgnoreCase("delete")) {
                         if (!player.hasPermission("mtleco.eco.admin.delete")) {
+                            //TODO: Change message to message.yml
                             player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                             return true;
                         }
@@ -103,12 +109,14 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                                 configSection.set(economyID, null); // Remove the currency section
                                 plugin.getEconomyHandler().removeEconomyImplementer(economyImplementer); // Remove from EconomyHandler
                                 plugin.getVaultHook().singleUnhook(economyImplementer); // Unhook from Vault
+                                //TODO: Change message to message.yml
                                 player.sendMessage(ChatColor.GRAY + "You have deleted the economy called " + ChatColor.AQUA + economyID);
 
                                 // Save the updated configuration
                                 plugin.saveConfig();
                                 plugin.reloadConfig();
                             } else {
+                                //TODO: Change message to message.yml
                                 player.sendMessage(ChatColor.RED + "Economy does not exist");
                             }
                         } catch (Exception e) {
@@ -120,6 +128,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                     //ICON DELETE COMMAND
                     if (args[1].equalsIgnoreCase("icondel")) {
                         if (!player.hasPermission("mtleco.eco.admin.icondel")) {
+                            //TODO: Change message to message.yml
                             player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                             return true;
                         }
@@ -134,12 +143,14 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                             if (economyImplementer != null) {
                                 config.set("currencies." + economyID + ".icon", economyID);
                                 economyImplementer.setIcon(economyID);
+                                //TODO: Change message to message.yml
                                 player.sendMessage(ChatColor.GRAY + "You have set the icon for the economy called " + ChatColor.AQUA + economyID);
 
                                 // Save the updated configuration
                                 plugin.saveConfig();
                                 plugin.reloadConfig();
                             } else {
+                                //TODO: Change message to message.yml
                                 player.sendMessage(ChatColor.RED + "Economy does not exist");
                             }
                         } catch (Exception e) {
@@ -153,6 +164,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                 if (args.length == 4) {
                     if (args[1].equalsIgnoreCase("iconset")) {
                         if (!player.hasPermission("mtleco.eco.admin.iconset")) {
+                            //TODO: Change message to message.yml
                             player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                             return true;
                         }
@@ -168,12 +180,14 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                             if (economyImplementer != null) {
                                 config.set("currencies." + economyID + ".icon", icon);
                                 economyImplementer.setIcon(icon);
+                                //TODO: Change message to message.yml
                                 player.sendMessage(ChatColor.GRAY + "You have set the icon for the economy called " + ChatColor.AQUA + economyID);
 
                                 // Save the updated configuration
                                 plugin.saveConfig();
                                 plugin.reloadConfig();
                             } else {
+                                //TODO: Change message to message.yml
                                 player.sendMessage(ChatColor.RED + "Economy does not exist");
                             }
                         } catch (Exception e) {
@@ -187,6 +201,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
             //GIVE COMMAND
             if (args[0].equalsIgnoreCase("give")) {
                 if (!player.hasPermission("mtleco.eco.admin.give")) {
+                    //TODO: Change message to message.yml
                     player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                     return true;
                 }
@@ -198,11 +213,13 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                         int depositAmount = Integer.parseInt(args[3]);
 
                         if (target == null) {
+                            //TODO: Change message to message.yml
                             sender.sendMessage(ChatColor.RED + "Player not found");
                             return true;
                         }
 
                         plugin.getEconomyHandler().getEconomyImplementer(economyID).depositPlayer(target, depositAmount);
+                        //TODO: Change message to message.yml
                         player.sendMessage(ChatColor.GRAY + "You have give §a" + depositAmount + "§7 into §a" + target.getName() + "'s " + economyID + " §7account");
 
                     } catch (Exception e) {
@@ -215,6 +232,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
             //BALANCE COMMAND
             if (args[0].equalsIgnoreCase("balance")) {
                 if (!player.hasPermission("mtleco.eco.balance")) {
+                    //TODO: Change message to message.yml
                     player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                     return true;
                 }
@@ -223,6 +241,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                     try {
                         for (EconomyImplementer economyImplementer : plugin.getEconomyHandler().getEconomyImplementers()) {
                             int balance = (int) economyImplementer.getBalance(player);
+                            //TODO: Change message to message.yml
                             player.sendMessage(ChatColor.GREEN + player.getName() + " §7has §a" + balance + "§7 in their " + ChatColor.AQUA + economyImplementer.getId() + ChatColor.GREEN + " account");
                         }
                     } catch (Exception e) {
@@ -231,18 +250,21 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                     return true;
                 } else if (args.length == 2) {
                     if (!player.hasPermission("mtleco.eco.balance.others")) {
+                        //TODO: Change message to message.yml
                         player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                         return true;
                     }
 
                     Player target = Bukkit.getPlayer(args[1]);
                     if (target == null) {
+                        //TODO: Change message to message.yml
                         sender.sendMessage(ChatColor.RED + "Player not found");
                         return true;
                     }
                     try {
                         for (EconomyImplementer economyImplementer : plugin.getEconomyHandler().getEconomyImplementers()) {
                             int balance = (int) economyImplementer.getBalance(target);
+                            //TODO: Change message to message.yml
                             player.sendMessage(ChatColor.GREEN + target.getName() + " §7has §a" + balance + "§7 in their " + ChatColor.AQUA + economyImplementer.getId() + ChatColor.GREEN + " account");
                         }
                     } catch (Exception e) {
@@ -255,6 +277,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
             //TAKE COMMAND
             if (args[0].equalsIgnoreCase("take")) {
                 if (!player.hasPermission("mtleco.eco.admin.take")) {
+                    //TODO: Change message to message.yml
                     player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                     return true;
                 }
@@ -266,16 +289,19 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                         int withdrawAmount = Integer.parseInt(args[3]);
 
                         if (target == null) {
+                            //TODO: Change message to message.yml
                             sender.sendMessage(ChatColor.RED + "Player not found");
                             return true;
                         }
 
                         if (plugin.getEconomyHandler().getEconomyImplementer(economyID).getBalance(target) < withdrawAmount) {
+                            //TODO: Change message to message.yml
                             player.sendMessage(ChatColor.RED + "You cannot withdraw more than you have in your account (" + ChatColor.AQUA + plugin.getEconomyHandler().getEconomyImplementer(economyID).getBalance(target) + ChatColor.RED + ")");
                             return true;
                         }
 
                         plugin.getEconomyHandler().getEconomyImplementer(economyID).withdrawPlayer(target, withdrawAmount);
+                        //TODO: Change message to message.yml
                         player.sendMessage(ChatColor.GRAY + "You have withdrawn §a$" + withdrawAmount + "§7 from §a" + target.getName() + "'s " + economyID + " §7account");
 
                     } catch (Exception e) {
@@ -288,6 +314,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
             //SET COMMAND
             if (args[0].equalsIgnoreCase("set")) {
                 if (!player.hasPermission("mtleco.eco.admin.set")) {
+                    //TODO: Change message to message.yml
                     player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                     return true;
                 }
@@ -299,16 +326,19 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                         int setAmount = Integer.parseInt(args[3]);
 
                         if (target == null) {
+                            //TODO: Change message to message.yml
                             player.sendMessage(ChatColor.RED + "Player not found");
                             return true;
                         }
 
                         if (setAmount < 0) {
+                            //TODO: Change message to message.yml
                             player.sendMessage(ChatColor.RED + "You cannot set a negative amount");
                             return true;
                         }
 
                         plugin.getEconomyHandler().getEconomyImplementer(economyID).setBalance(target, setAmount);
+                        //TODO: Change message to message.yml
                         player.sendMessage(ChatColor.GRAY + "You have set §a" + target.getName() + "'s " + economyID + " §7account to §a" + setAmount);
 
                     } catch (Exception e) {

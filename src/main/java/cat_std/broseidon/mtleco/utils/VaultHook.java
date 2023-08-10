@@ -25,6 +25,7 @@ public class VaultHook {
         for (EconomyImplementer economyImplementer : plugin.getEconomyHandler().getEconomyImplementers()) {
             provider.add(economyImplementer);
             Bukkit.getServicesManager().register(Economy.class, economyImplementer, plugin, ServicePriority.Highest);
+            //TODO: Change message to message.yml
             Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI hooked to " + ChatColor.AQUA + economyImplementer.getId());
         }
     }
@@ -32,6 +33,7 @@ public class VaultHook {
     public void singleHook(EconomyImplementer economyImplementer) {
         provider.add(economyImplementer);
         Bukkit.getServicesManager().register(Economy.class, economyImplementer, plugin, ServicePriority.Highest);
+        //TODO: Change message to message.yml
         Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI hooked to " + ChatColor.AQUA + economyImplementer.getId());
     }
 
@@ -39,12 +41,14 @@ public class VaultHook {
 
         for (Economy economy : provider) {
             Bukkit.getServicesManager().unregister(Economy.class, economy);
+            //TODO: Change message to message.yml
             Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI unhooked from " + ChatColor.AQUA + economy.getName());
         }
     }
 
     public void singleUnhook(EconomyImplementer economyImplementer) {
         Bukkit.getServicesManager().unregister(Economy.class, economyImplementer);
+        //TODO: Change message to message.yml
         Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI unhooked from " + ChatColor.AQUA + economyImplementer.getName());
     }
 }

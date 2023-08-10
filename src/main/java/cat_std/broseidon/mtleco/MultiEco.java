@@ -38,6 +38,7 @@ public final class MultiEco extends JavaPlugin {
 
         for (String currencyID : currenciesSection.getKeys(false)) {
             String icon = currenciesSection.getString(currencyID + ".icon");
+            //TODO: Change message to message.yml
             Bukkit.getConsoleSender().sendMessage("Loading " + currencyID + " economy...");
             EconomyImplementer economyImplementer = new EconomyImplementer(this, currencyID);
             economyImplementer.setIcon(icon);

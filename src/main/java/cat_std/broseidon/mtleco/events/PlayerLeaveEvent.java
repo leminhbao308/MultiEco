@@ -45,6 +45,7 @@ public class PlayerLeaveEvent implements Listener {
                 }
             }
 
+            //TODO: Change message to message.yml
             Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Saved currencies data for " + ChatColor.YELLOW + player.getName());
             try {
                 playerDataConfig.save(playerDataFile);

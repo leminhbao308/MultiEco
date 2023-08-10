@@ -33,6 +33,7 @@ public class PlayerJoinEvent implements Listener {
 
         if (!playerDataFile.exists()) {
             try {
+                //TODO: Change message to message.yml
                 Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Data not found! Created data file for " + player.getName());
                 playerDataFile.createNewFile();
             } catch (IOException e) {
@@ -60,6 +61,7 @@ public class PlayerJoinEvent implements Listener {
             playerDataConfig.set(missingCurrency, null);
         }
 
+        //TODO: Change message to message.yml
         Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loaded currencies data for " + ChatColor.YELLOW + player.getName());
 
         try {

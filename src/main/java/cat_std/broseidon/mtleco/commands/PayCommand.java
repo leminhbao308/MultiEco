@@ -22,6 +22,7 @@ public class PayCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.hasPermission("mtleco.pay")) {
+            //TODO: Change message to message.yml
             sender.sendMessage("§cYou do not have permission to use this command.");
             return true;
         }
@@ -36,15 +37,19 @@ public class PayCommand implements CommandExecutor, TabCompleter {
                             if (plugin.getEconomyHandler().getEconomyImplementer(args[1]).getBalance(player) >= Double.parseDouble(args[2])) {
                                 plugin.getEconomyHandler().getEconomyImplementer(args[1]).withdrawPlayer(player, Double.parseDouble(args[2]));
                                 plugin.getEconomyHandler().getEconomyImplementer(args[1]).depositPlayer(target, Double.parseDouble(args[2]));
+                                //TODO: Change message to message.yml
                                 player.sendMessage("§aYou have sent §e" + args[2] + " " + plugin.getEconomyHandler().getEconomyImplementer(args[1]).getName() + "§a to §e" + target.getName() + "§a.");
                                 target.sendMessage("§aYou have received §e" + args[2] + " " + plugin.getEconomyHandler().getEconomyImplementer(args[1]).getName() + "§a from §e" + player.getName() + "§a.");
                             } else {
+                                //TODO: Change message to message.yml
                                 player.sendMessage("§cYou do not have enough money.");
                             }
                         } else {
+                            //TODO: Change message to message.yml
                             player.sendMessage("§cThe currency does not exist.");
                         }
                     } else {
+                        //TODO: Change message to message.yml
                         player.sendMessage("§cThe target is not online.");
                     }
                 }
