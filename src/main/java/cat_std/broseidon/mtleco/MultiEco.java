@@ -1,6 +1,7 @@
 package cat_std.broseidon.mtleco;
 
 import cat_std.broseidon.mtleco.commands.EconomyCommands;
+import cat_std.broseidon.mtleco.commands.PayCommand;
 import cat_std.broseidon.mtleco.economy.EconomyHandler;
 import cat_std.broseidon.mtleco.economy.EconomyImplementer;
 import cat_std.broseidon.mtleco.events.PlayerJoinEvent;
@@ -72,6 +73,9 @@ public final class MultiEco extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerJoinEvent(this), this);
         getServer().getPluginManager().registerEvents(new PlayerLeaveEvent(this), this);
         this.getCommand("eco").setExecutor(new EconomyCommands(this));
+        this.getCommand("eco").setTabCompleter(new EconomyCommands(this));
+        this.getCommand("pay").setExecutor(new PayCommand(this));
+        this.getCommand("pay").setTabCompleter(new PayCommand(this));
     }
 
     private void hookPlugin() {
@@ -87,5 +91,9 @@ public final class MultiEco extends JavaPlugin {
 
     public EconomyHandler getEconomyHandler() {
         return economyHandler;
+    }
+
+    public VaultHook getVaultHook() {
+        return vaultHook;
     }
 }

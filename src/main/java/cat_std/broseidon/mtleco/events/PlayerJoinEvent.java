@@ -4,7 +4,6 @@ import cat_std.broseidon.mtleco.MultiEco;
 import cat_std.broseidon.mtleco.economy.EconomyImplementer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +12,8 @@ import org.bukkit.event.Listener;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerJoinEvent implements Listener {
 
@@ -24,15 +25,15 @@ public class PlayerJoinEvent implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onPlayerJoin(org.bukkit.event.player.PlayerJoinEvent event) {
-        loadData(event);
+        loadData(event.getPlayer());
     }
 
-    private void loadData(org.bukkit.event.player.PlayerJoinEvent event) {
-        File playerDataFile = new File(plugin.getDataPackage(), event.getPlayer().getUniqueId() + ".yml");
+    private void loadData(Player player) {
+        File playerDataFile = new File(plugin.getDataPackage(), player.getUniqueId() + ".yml");
 
         if (!playerDataFile.exists()) {
             try {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Data not found! Created data file for " + event.getPlayer().getName());
+                Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Data not found! Created data file for " + player.getName());
                 playerDataFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -41,18 +42,30 @@ public class PlayerJoinEvent implements Listener {
 
         YamlConfiguration playerDataConfig = YamlConfiguration.loadConfiguration(playerDataFile);
 
-        Player player = event.getPlayer();
-        if (player != null) {
-            for (EconomyImplementer currency : plugin.getEconomyHandler().getEconomyImplementers()) {
-                if (playerDataConfig.contains(currency.getId())) {
-                    double balance = playerDataConfig.getDouble(currency.getId());
-                    currency.setBalance(player, balance);
-                } else {
-                    currency.setBalance(player, 0);
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loaded default balance for " + event.getPlayer().getName() + " in " + ChatColor.YELLOW + currency.getId() + " economy");
-                    playerDataConfig.set(currency.getId(), 0);
-                }
+        List<String> missingCurrencies = new ArrayList<>();
+
+        for (EconomyImplementer currency : plugin.getEconomyHandler().getEconomyImplementers()) {
+            if (playerDataConfig.contains(currency.getId())) {
+                double balance = playerDataConfig.getDouble(currency.getId());
+                currency.setBalance(player, balance);
+            } else {
+                currency.setBalance(player, 0);
+                playerDataConfig.set(currency.getId(), 0);
+                missingCurrencies.add(currency.getId());
             }
+        }
+
+        // Remove missing currencies from player data file
+        for (String missingCurrency : missingCurrencies) {
+            playerDataConfig.set(missingCurrency, null);
+        }
+
+        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loaded currencies data for " + ChatColor.YELLOW + player.getName());
+
+        try {
+            playerDataConfig.save(playerDataFile);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

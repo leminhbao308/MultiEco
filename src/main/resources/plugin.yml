@@ -5,6 +5,32 @@ author: Broseidon.0308
 api-version: 1.19
 
 commands:
- eco:
-  usage: /<command>
-  description: Run eco commands
+  eco:
+    usage: /<command>
+    description: Run eco commands
+  pay:
+    usage: /<command>
+    description: Run pay commands
+
+permissions:
+  mtleco.eco.admin:
+    description: Allows access to the /eco command
+    default: op
+    children:
+      mtleco.eco.admin.reload: true
+      mtleco.eco.admin.give: true
+      mtleco.eco.admin.set: true
+      mtleco.eco.admin.take: true
+      mtleco.eco.admin.create: true
+      mtleco.eco.admin.delete: true
+      mtleco.eco.admin.iconset: true
+      mtleco.eco.admin.icondel: true
+  mtleco.eco.balance:
+    description: Allows access to the /eco balance
+    default: true
+  mtleco.eco.balance.others:
+    description: Allows access to the /eco balance <player>
+    default: op
+  mtleco.pay:
+    description: Allows access to the /pay command
+    default: true

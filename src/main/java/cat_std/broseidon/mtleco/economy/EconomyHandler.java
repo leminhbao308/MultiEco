@@ -1,33 +1,33 @@
 package cat_std.broseidon.mtleco.economy;
 
-import java.util.ArrayList;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import java.util.List;
 
 public class EconomyHandler {
     private final List<EconomyImplementer> economyImplementers;
 
-    public EconomyHandler() {
-        this.economyImplementers = new ArrayList<>();
-    }
 
     public EconomyHandler(List<EconomyImplementer> economyImplementers) {
         this.economyImplementers = economyImplementers;
     }
 
-    public boolean addEconomyImplementer(EconomyImplementer economyImplementer) {
+    public void addEconomyImplementer(EconomyImplementer economyImplementer) {
         if (economyImplementers.contains(economyImplementer)) {
-            return false;
+            return;
         }
         economyImplementers.add(economyImplementer);
-        return true;
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            economyImplementer.setBalance(player, 0);
+        }
     }
 
-    public boolean removeEconomyImplementer(EconomyImplementer economyImplementer) {
+    public void removeEconomyImplementer(EconomyImplementer economyImplementer) {
         if (!economyImplementers.contains(economyImplementer)) {
-            return false;
+            return;
         }
         economyImplementers.remove(economyImplementer);
-        return true;
     }
 
     public EconomyImplementer getEconomyImplementer(String id) {

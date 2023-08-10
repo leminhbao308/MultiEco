@@ -2,8 +2,8 @@ package cat_std.broseidon.mtleco.events;
 
 import cat_std.broseidon.mtleco.MultiEco;
 import cat_std.broseidon.mtleco.economy.EconomyImplementer;
-import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,6 +37,15 @@ public class PlayerLeaveEvent implements Listener {
                 double balance = currency.getBalance(player);
                 playerDataConfig.set(currency.getId(), balance);
             }
+
+            // Remove non-existent currencies from the data
+            for (String currencyId : playerDataConfig.getKeys(false)) {
+                if (plugin.getEconomyHandler().getEconomyImplementer(currencyId) == null) {
+                    playerDataConfig.set(currencyId, null);
+                }
+            }
+
+            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Saved currencies data for " + ChatColor.YELLOW + player.getName());
             try {
                 playerDataConfig.save(playerDataFile);
             } catch (IOException e) {
