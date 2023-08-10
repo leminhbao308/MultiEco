@@ -16,6 +16,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main class của plugin
+ * @author Broseidon
+ */
 public final class MultiEco extends JavaPlugin {
 
     private EconomyHandler economyHandler;
@@ -32,6 +36,34 @@ public final class MultiEco extends JavaPlugin {
         register();
     }
 
+    /**
+     * Load dữ liệu cần thiết cho plugin
+     */
+    private void loadData() {
+        //Đường dẫn đến thư mục plugin
+        File pluginFolder = getDataFolder();
+        if (!pluginFolder.exists()) {
+            pluginFolder.mkdir();
+        }
+        //Lấy file config.yml
+        File configFile = new File(pluginFolder, "config.yml");
+        //Nếu file config.yml không tồn tại thì tạo file config.yml
+        if (!configFile.exists()) {
+            getConfig().options().copyDefaults();
+            saveDefaultConfig();
+        }
+        //Tạo thư mục data
+        dataPackage = new File(pluginFolder, "data");
+        if (!dataPackage.exists()) {
+            dataPackage.mkdir();
+        }
+    }
+
+    /**
+     * Load các loại tiền tệ và lưu trữ vào EconomyHandler
+     *
+     * @param config FileConfiguration của config.yml
+     */
     private void loadEconomyHandler(FileConfiguration config) {
         ConfigurationSection currenciesSection = config.getConfigurationSection("currencies");
         List<EconomyImplementer> economyImplementers = new ArrayList<>();
@@ -48,28 +80,17 @@ public final class MultiEco extends JavaPlugin {
         economyHandler = new EconomyHandler(economyImplementers);
     }
 
-
-    private void loadData() {
-        File pluginFolder = getDataFolder();
-        if (!pluginFolder.exists()) {
-            pluginFolder.mkdir();
-        }
-        File configFile = new File(pluginFolder, "config.yml");
-        if (!configFile.exists()) {
-            getConfig().options().copyDefaults();
-            saveDefaultConfig();
-        }
-
-        dataPackage = new File(pluginFolder, "data");
-        if (!dataPackage.exists()) {
-            dataPackage.mkdir();
-        }
+    /**
+     * Liên kết vào Vault
+     */
+    private void hookPlugin() {
+        vaultHook = new VaultHook(this);
+        vaultHook.hook();
     }
 
-    public File getDataPackage() {
-        return dataPackage;
-    }
-
+    /**
+     * Đăng ký các sự kiện và lệnh
+     */
     private void register() {
         getServer().getPluginManager().registerEvents(new PlayerJoinEvent(this), this);
         getServer().getPluginManager().registerEvents(new PlayerLeaveEvent(this), this);
@@ -79,15 +100,14 @@ public final class MultiEco extends JavaPlugin {
         this.getCommand("pay").setTabCompleter(new PayCommand(this));
     }
 
-    private void hookPlugin() {
-        vaultHook = new VaultHook(this);
-        vaultHook.hook();
-    }
-
     @Override
     public void onDisable() {
         // Plugin shutdown logic
         vaultHook.unhook();
+    }
+
+    public File getDataPackage() {
+        return dataPackage;
     }
 
     public EconomyHandler getEconomyHandler() {

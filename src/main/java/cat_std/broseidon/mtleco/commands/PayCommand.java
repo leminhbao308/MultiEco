@@ -11,6 +11,12 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class này dùng để quản lý lệnh /pay trong plugin
+ * Lệnh /pay dùng để chuyển tiền cho người chơi khác
+ *
+ * @author Broseidon
+ */
 public class PayCommand implements CommandExecutor, TabCompleter {
 
     private final MultiEco plugin;
@@ -27,6 +33,7 @@ public class PayCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        //Thực hiện lệnh khi người chơi gõ /pay <tên người chơi> <tên tiền tệ> <số tiền>
         if (sender instanceof Player) {
             if (command.getName().equalsIgnoreCase("pay")) {
                 if (args.length == 3) {
@@ -58,6 +65,13 @@ public class PayCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
+    /**
+     * @param sender  Người thực hiện lệnh
+     * @param command Câu lệnh được thực hiện
+     * @param label   Các tên phụ của lệnh
+     * @param args    Các đối số được cung cấp cho lệnh
+     * @return Danh sách các đối số được đề xuất
+     */
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         List<String> tabComplete = new ArrayList<>();

@@ -11,6 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Class này dùng để implement các loại tiền tệ vào VaultAPI
+ * @author Broseidon
+ */
 public class EconomyImplementer implements Economy {
 
     private final MultiEco plugin;

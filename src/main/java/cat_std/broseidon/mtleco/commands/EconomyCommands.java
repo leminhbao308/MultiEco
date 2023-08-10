@@ -15,6 +15,13 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Class này chứa các lệnh /eco của plugin
+ * Lệnh /eco dùng để quản lý tiền tệ trong server
+ *
+ * @author Broseidon
+ */
 public class EconomyCommands implements CommandExecutor, TabCompleter {
 
     private final MultiEco plugin;
@@ -351,6 +358,14 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
         return true;
     }
 
+
+    /**
+     * @param sender  Người thực hiện lệnh
+     * @param command Câu lệnh được thực hiện
+     * @param label   Các tên phụ của lệnh
+     * @param args    Các đối số được cung cấp cho lệnh
+     * @return Danh sách các đối số được đề xuất
+     */
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         List<String> tabComplete = new ArrayList<>();

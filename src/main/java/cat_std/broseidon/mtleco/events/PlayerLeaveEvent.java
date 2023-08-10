@@ -15,6 +15,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+/**
+ * Sự kiện khi người chơi rời khỏi server <br>
+ * Lưu dữ liệu của người chơi vào file yml
+ *
+ * @see PlayerJoinEvent
+ * @author Broseidon
+ */
 public class PlayerLeaveEvent implements Listener {
     private final MultiEco plugin;
 
