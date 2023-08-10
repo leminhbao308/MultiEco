@@ -1,4 +1,4 @@
-package cat_std.broseidon.mtleco.utils;
+package cat_std.broseidon.mtleco.economy;
 
 import cat_std.broseidon.mtleco.MultiEco;
 import net.milkbowl.vault.economy.Economy;
@@ -7,21 +7,51 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 public class EconomyImplementer implements Economy {
 
-    private MultiEco plugin = MultiEco.getInstance();
+    private final MultiEco plugin;
+    private final String id;
+    private final String name;
+    private String icon;
+
+    private final HashMap<UUID, Double> playerBalances;
+
+    public EconomyImplementer(MultiEco plugin,String id) {
+        this.plugin = plugin;
+        this.id = id;
+        this.name = id;
+        this.icon = id;
+        this.playerBalances = new HashMap<>();
+    }
+
+    public HashMap<UUID, Double> getPlayerBalances() {
+        return playerBalances;
+    }
 
     @Override
     public boolean isEnabled() {
         return false;
     }
 
+    public String getId() {
+        return id;
+    }
+
     @Override
     public String getName() {
-        return null;
+        return name;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getIcon() {
+        return icon;
     }
 
     @Override
@@ -70,102 +100,128 @@ public class EconomyImplementer implements Economy {
     }
 
     @Override
-    public double getBalance(String s) {
-        Player player = Bukkit.getPlayer(s);
+    public double getBalance(String name) {
+        Player player = Bukkit.getPlayer(name);
         UUID uuid = player.getUniqueId();
-        return plugin.getPlayerBank().get(uuid);
+        return this.playerBalances.get(uuid);
     }
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
         UUID uuid = offlinePlayer.getUniqueId();
-        return plugin.getPlayerBank().get(uuid);
+        return this.playerBalances.get(uuid);
     }
 
     @Override
-    public double getBalance(String s, String s1) {
-        Player player = Bukkit.getPlayer(s);
+    public double getBalance(String name, String s1) {
+        Player player = Bukkit.getPlayer(name);
         UUID uuid = player.getUniqueId();
-        return plugin.getPlayerBank().get(uuid);
+        return this.playerBalances.get(uuid);
     }
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer, String s) {
         UUID uuid = offlinePlayer.getUniqueId();
-        return plugin.getPlayerBank().get(uuid);
+        return this.playerBalances.get(uuid);
     }
 
     @Override
-    public boolean has(String s, double v) {
-        return false;
+    public boolean has(String name, double amount) {
+        if (Bukkit.getPlayer(name) == null) return false;
+        else
+            return this.playerBalances.get(Bukkit.getPlayer(name).getUniqueId()) >= amount;
     }
 
     @Override
-    public boolean has(OfflinePlayer offlinePlayer, double v) {
-        return false;
+    public boolean has(OfflinePlayer offlinePlayer, double amount) {
+        return this.playerBalances.get(offlinePlayer.getUniqueId()) >= amount;
     }
 
     @Override
-    public boolean has(String s, String s1, double v) {
-        return false;
+    public boolean has(String name, String s1, double amount) {
+        if (Bukkit.getPlayer(name) == null) return false;
+        else
+            return this.playerBalances.get(Bukkit.getPlayer(name).getUniqueId()) >= amount;
     }
 
     @Override
-    public boolean has(OfflinePlayer offlinePlayer, String s, double v) {
-        return false;
+    public boolean has(OfflinePlayer offlinePlayer, String s, double amount) {
+        return this.playerBalances.get(offlinePlayer.getUniqueId()) >= amount;
     }
 
     @Override
-    public EconomyResponse withdrawPlayer(String s, double v) {
-        return null;
+    public EconomyResponse withdrawPlayer(String name, double amount) {
+        return getEconomyResponse(name, amount);
+    }
+
+    private EconomyResponse getEconomyResponse(String name, double amount) {
+        double oldBalance = 0;
+        if (has(name, amount)) {
+            Player player = Bukkit.getPlayer(name);
+            UUID uuid = player.getUniqueId();
+            oldBalance = this.playerBalances.get(uuid);
+            this.playerBalances.put(uuid, oldBalance - amount);
+            return new EconomyResponse(amount, oldBalance - amount, EconomyResponse.ResponseType.SUCCESS, "");
+        } else
+            return new EconomyResponse(amount, oldBalance, EconomyResponse.ResponseType.FAILURE, "");
     }
 
     @Override
-    public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
-        return null;
+    public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double amount) {
+        double oldBalance = 0;
+        if (has(offlinePlayer, amount)) {
+            UUID uuid = offlinePlayer.getUniqueId();
+            oldBalance = this.playerBalances.get(uuid);
+            this.playerBalances.put(uuid, oldBalance - amount);
+            return new EconomyResponse(amount, oldBalance - amount, EconomyResponse.ResponseType.SUCCESS, "");
+        } else
+            return new EconomyResponse(amount, oldBalance, EconomyResponse.ResponseType.FAILURE, "");
     }
 
     @Override
-    public EconomyResponse withdrawPlayer(String s, String s1, double v) {
-        return null;
+    public EconomyResponse withdrawPlayer(String name, String s1, double amount) {
+        return getEconomyResponse(name, amount);
     }
 
     @Override
-    public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, String s, double v) {
-        return null;
-    }
-
-    @Override
-    public EconomyResponse depositPlayer(String s, double v) {
-        Player player = Bukkit.getPlayer(s);
-        UUID uuid = player.getUniqueId();
-        double oldBalance = plugin.getPlayerBank().get(uuid);
-        plugin.getPlayerBank().put(uuid, oldBalance + v);
-        return null;
-    }
-
-    @Override
-    public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
+    public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, String s, double amount) {
         UUID uuid = offlinePlayer.getUniqueId();
-        double oldBalance = plugin.getPlayerBank().get(uuid);
-        plugin.getPlayerBank().put(uuid, oldBalance + v);
+        double oldBalance = this.playerBalances.get(uuid);
+        this.playerBalances.put(uuid, oldBalance - amount);
         return null;
     }
 
     @Override
-    public EconomyResponse depositPlayer(String s, String s1, double v) {
-        Player player = Bukkit.getPlayer(s);
+    public EconomyResponse depositPlayer(String name, double amount) {
+        Player player = Bukkit.getPlayer(name);
         UUID uuid = player.getUniqueId();
-        double oldBalance = plugin.getPlayerBank().get(uuid);
-        plugin.getPlayerBank().put(uuid, oldBalance + v);
+        double oldBalance = this.playerBalances.get(uuid);
+        this.playerBalances.put(uuid, oldBalance + amount);
         return null;
     }
 
     @Override
-    public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, String s, double v) {
+    public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double amount) {
         UUID uuid = offlinePlayer.getUniqueId();
-        double oldBalance = plugin.getPlayerBank().get(uuid);
-        plugin.getPlayerBank().put(uuid, oldBalance + v);
+        double oldBalance = this.playerBalances.get(uuid);
+        this.playerBalances.put(uuid, oldBalance + amount);
+        return null;
+    }
+
+    @Override
+    public EconomyResponse depositPlayer(String name, String s1, double amount) {
+        Player player = Bukkit.getPlayer(name);
+        UUID uuid = player.getUniqueId();
+        double oldBalance = this.playerBalances.get(uuid);
+        this.playerBalances.put(uuid, oldBalance + amount);
+        return null;
+    }
+
+    @Override
+    public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, String s, double amount) {
+        UUID uuid = offlinePlayer.getUniqueId();
+        double oldBalance = this.playerBalances.get(uuid);
+        this.playerBalances.put(uuid, oldBalance + amount);
         return null;
     }
 
@@ -247,5 +303,10 @@ public class EconomyImplementer implements Economy {
     @Override
     public boolean createPlayerAccount(OfflinePlayer offlinePlayer, String s) {
         return false;
+    }
+
+    public void setBalance(Player player, double balance) {
+        UUID uuid = player.getUniqueId();
+        this.playerBalances.put(uuid, balance);
     }
 }

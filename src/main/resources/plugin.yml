@@ -1,4 +1,10 @@
 name: MultiEco
 version: '${project.version}'
 main: cat_std.broseidon.mtleco.MultiEco
-api-version: '1.19'
+author: Broseidon.0308
+api-version: 1.19
+
+commands:
+ eco:
+  usage: /<command>
+  description: Run eco commands

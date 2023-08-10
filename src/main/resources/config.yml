@@ -1,0 +1,5 @@
+currencies:
+  money:
+    icon: "$"
+  ruby:
+    icon: "R"
