@@ -1,8 +1,47 @@
 currencies:
   money:
-    icon: "$"
+    icon: $
     # Only one currency can be default
     # Default currency is used with other plugins hooking into Vault like ShopGUIPlus, MMOCore, etc.
     default: true
   ruby:
-    icon: "R"
+    icon: R
+
+# Available placeholders:
+# {player} - Player's name
+# {currency} - Currency's name
+# {icon} - Currency's icon
+# {amount} - Amount of currency
+# You can use hex colors with & symbol ex: &#00ff00
+messages:
+  player-data-not-found: "&9Player data not found! Creating new data for &6{player}..."
+  player-data-loaded: "&9Loaded currencies data for &6{player}&9!"
+  player-data-saved: "&9Saved currencies data for &6{player}&9!"
+
+  no-permission: "&cYou don't have permission to use this command!"
+  config-reloaded: "&9Config reloaded!"
+  balance-title: "&a=========&9Your balance&a========="
+  balance-other-title: "&a=========&9{player}'s balance&a========="
+  balance: "&9{currency} &8- &6{amount}"
+  balance-other: "&9{currency} &8- &6{amount}"
+
+  no-player-specified: "&cYou must specify a player!"
+  not-online: "&cPlayer &6{player} &cis not online!"
+  not-found: "&cPlayer &6{player} &cnot found!"
+  negative-amount: "&cYou can't use negative amount!"
+  not-enough-money: "&cYou don't have enough money!"
+
+  give-message: "&9You gave &6{amount} {currency} &9to &6{player}&9!"
+  set-message: "&9You set &6{player}'s &9balance to &6{amount} {currency}&9!"
+  take-message: "&9You took &6{amount} {currency} &9from &6{player}&9!"
+  not-enough-to-take: "&c{player} doesn't have enough money to take ({amount} {currency})"
+
+  pay-message: "&9You paid &6{amount} {currency} &9to &6{player}&9!"
+  received-message: "&6{player} &9paid you &6{amount} {currency}&9!"
+
+  currency-created: "&9Created new currency &6{currency} &a({icon})&9!"
+  currency-already-exists: "&cCurrency &6{currency} &calready exists!"
+  currency-not-exists: "&cCurrency &6{currency} &cnot exists!"
+  currency-deleted: "&9Deleted currency &6{currency}&9!"
+  icon-set: "&9Set icon of &6{currency} &9to &6{icon}&9!"
+  default-set: "&9Set &6{currency} &9as default!"
