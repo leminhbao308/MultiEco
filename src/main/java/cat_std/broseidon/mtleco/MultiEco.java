@@ -8,6 +8,7 @@ import cat_std.broseidon.mtleco.events.PlayerJoinEvent;
 import cat_std.broseidon.mtleco.events.PlayerLeaveEvent;
 import cat_std.broseidon.mtleco.utils.VaultHook;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,6 +19,7 @@ import java.util.List;
 
 /**
  * Main class của plugin
+ *
  * @author Broseidon
  */
 public final class MultiEco extends JavaPlugin {
@@ -30,10 +32,16 @@ public final class MultiEco extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        Bukkit.getConsoleSender().sendMessage("=====================================");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "MultiEco is starting...");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "Author: " + ChatColor.AQUA + "Broseidon0308");
+        Bukkit.getConsoleSender().sendMessage("=====================================");
         loadData();
         loadEconomyHandler(getConfig());
         hookPlugin();
         register();
+        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "MultiEco started successfully");
+        Bukkit.getConsoleSender().sendMessage("=====================================");
     }
 
     /**
@@ -51,12 +59,16 @@ public final class MultiEco extends JavaPlugin {
         if (!configFile.exists()) {
             getConfig().options().copyDefaults();
             saveDefaultConfig();
+            configFile = new File(pluginFolder, "config.yml");
         }
         //Tạo thư mục data
         dataPackage = new File(pluginFolder, "data");
         if (!dataPackage.exists()) {
             dataPackage.mkdir();
         }
+
+        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "Data loaded");
+        Bukkit.getConsoleSender().sendMessage("=====================================");
     }
 
     /**
@@ -70,8 +82,6 @@ public final class MultiEco extends JavaPlugin {
 
         for (String currencyID : currenciesSection.getKeys(false)) {
             String icon = currenciesSection.getString(currencyID + ".icon");
-            //TODO: Change message to message.yml
-            Bukkit.getConsoleSender().sendMessage("Loading " + currencyID + " economy...");
             EconomyImplementer economyImplementer = new EconomyImplementer(this, currencyID);
             economyImplementer.setIcon(icon);
             // Add economyImplementer into EconomyHandler
