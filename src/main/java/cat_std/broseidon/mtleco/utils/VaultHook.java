@@ -12,8 +12,9 @@ import java.util.List;
 
 /**
  * Class này dùng để liên kết các loại tiền tệ với VaultAPI
- * @see EconomyImplementer
+ *
  * @author Broseidon
+ * @see EconomyImplementer
  */
 public class VaultHook {
 
@@ -32,21 +33,26 @@ public class VaultHook {
         provider = new ArrayList<>();
         for (EconomyImplementer economyImplementer : plugin.getEconomyHandler().getEconomyImplementers()) {
             provider.add(economyImplementer);
-            Bukkit.getServicesManager().register(Economy.class, economyImplementer, plugin, ServicePriority.Highest);
-            //TODO: Change message to message.yml
-            Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI hooked to " + ChatColor.AQUA + economyImplementer.getId());
+            if (plugin.getConfig().getBoolean("currencies." + economyImplementer.getId() + ".default")) {
+                Bukkit.getServicesManager().register(Economy.class, economyImplementer, plugin, ServicePriority.Highest);
+                //TODO: Change message to message.yml
+                Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI hooked to " + ChatColor.AQUA + economyImplementer.getId() + "as default currency");
+            }
         }
     }
 
     /**
      * Liên kết một loại tiền tệ với VaultAPI
+     *
      * @param economyImplementer Loại tiền tệ cần liên kết
      */
     public void singleHook(EconomyImplementer economyImplementer) {
         provider.add(economyImplementer);
-        Bukkit.getServicesManager().register(Economy.class, economyImplementer, plugin, ServicePriority.Highest);
-        //TODO: Change message to message.yml
-        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI hooked to " + ChatColor.AQUA + economyImplementer.getId());
+        if (plugin.getConfig().getBoolean("currencies." + economyImplementer.getId() + ".default")) {
+            Bukkit.getServicesManager().register(Economy.class, economyImplementer, plugin, ServicePriority.Highest);
+            //TODO: Change message to message.yml
+            Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI hooked to " + ChatColor.AQUA + economyImplementer.getId() + "as default currency");
+        }
     }
 
     /**
@@ -63,6 +69,7 @@ public class VaultHook {
 
     /**
      * Hủy liên kết một loại tiền tệ với VaultAPI
+     *
      * @param economyImplementer Loại tiền tệ cần hủy liên kết
      */
     public void singleUnhook(EconomyImplementer economyImplementer) {

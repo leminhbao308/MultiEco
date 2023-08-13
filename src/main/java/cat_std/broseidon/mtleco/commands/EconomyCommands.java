@@ -238,11 +238,34 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
 
             //BALANCE COMMAND
             if (args[0].equalsIgnoreCase("balance")) {
-                if (!player.hasPermission("mtleco.eco.balance")) {
+                if ((sender instanceof Player) && (!player.hasPermission("mtleco.eco.balance"))) {
                     //TODO: Change message to message.yml
-                    player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                    sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                     return true;
+                } else {
+                    if (args.length == 1) {
+                        Bukkit.getLogger().warning("You can't use this command in console");
+                        return true;
+                    } else if (args.length == 2) {
+                        Player target = Bukkit.getPlayer(args[1]);
+                        if (target == null) {
+                            //TODO: Change message to message.yml
+                            sender.sendMessage(ChatColor.RED + "Player not found");
+                            return true;
+                        }
+                        try {
+                            for (EconomyImplementer economyImplementer : plugin.getEconomyHandler().getEconomyImplementers()) {
+                                int balance = (int) economyImplementer.getBalance(target);
+                                //TODO: Change message to message.yml
+                                sender.sendMessage(ChatColor.GREEN + target.getName() + " §7has §a" + balance + "§7 in their " + ChatColor.AQUA + economyImplementer.getId() + ChatColor.GREEN + " account");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return true;
+                    }
                 }
+
 
                 if (args.length == 1) {
                     try {

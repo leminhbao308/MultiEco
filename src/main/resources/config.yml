@@ -1,5 +1,8 @@
 currencies:
   money:
     icon: "$"
+    # Only one currency can be default
+    # Default currency is used with other plugins hooking into Vault like ShopGUIPlus, MMOCore, etc.
+    default: true
   ruby:
     icon: "R"
