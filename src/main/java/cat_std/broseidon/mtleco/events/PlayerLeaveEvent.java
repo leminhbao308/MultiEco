@@ -2,6 +2,7 @@ package cat_std.broseidon.mtleco.events;
 
 import cat_std.broseidon.mtleco.MultiEco;
 import cat_std.broseidon.mtleco.economy.EconomyImplementer;
+import cat_std.broseidon.mtleco.utils.ColorCode;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -19,8 +20,8 @@ import java.util.UUID;
  * Sự kiện khi người chơi rời khỏi server <br>
  * Lưu dữ liệu của người chơi vào file yml
  *
- * @see PlayerJoinEvent
  * @author Broseidon
+ * @see PlayerJoinEvent
  */
 public class PlayerLeaveEvent implements Listener {
     private final MultiEco plugin;
@@ -52,8 +53,7 @@ public class PlayerLeaveEvent implements Listener {
                 }
             }
 
-            //TODO: Change message to message.yml
-            Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Saved currencies data for " + ChatColor.YELLOW + player.getName());
+            Bukkit.getConsoleSender().sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getPlayerDataSaved(), player.getName(), "", "", 0)));
             try {
                 playerDataConfig.save(playerDataFile);
             } catch (IOException e) {

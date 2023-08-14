@@ -23,4 +23,8 @@ public class ColorCode {
     public static List<String> translate(List<String> input) {
         return (List<String>) input.stream().map(ColorCode::translate).collect(Collectors.toList());
     }
+
+    public static String autoReplace(String inputString, String playerName, String currencyName, String currencyIcon, double amount) {
+        return inputString.replace("{player}", playerName).replace("{currency}", currencyName).replace("{icon}", currencyIcon).replace("{amount}", String.valueOf(amount));
+    }
 }

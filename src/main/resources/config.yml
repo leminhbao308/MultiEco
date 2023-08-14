@@ -1,7 +1,13 @@
+# !!! DON'T TOUCH THIS !!!
+debug: false
+
+
+prefix: "&9[&aMulti&#00ff00Currencies&9] &r> "
+
 currencies:
   money:
     icon: $
-    # Only one currency can be default
+    # Only one currency can be default.
     # Default currency is used with other plugins hooking into Vault like ShopGUIPlus, MMOCore, etc.
     default: true
   ruby:
@@ -14,31 +20,44 @@ currencies:
 # {amount} - Amount of currency
 # You can use hex colors with & symbol ex: &#00ff00
 messages:
+  config-reloaded: "&9Config reloaded!"
+  # Data loading messages.
+  # This messages section can only use {player} placeholder.
   player-data-not-found: "&9Player data not found! Creating new data for &6{player}..."
   player-data-loaded: "&9Loaded currencies data for &6{player}&9!"
   player-data-saved: "&9Saved currencies data for &6{player}&9!"
 
-  no-permission: "&cYou don't have permission to use this command!"
-  config-reloaded: "&9Config reloaded!"
+  # Command messages
+  # This messages section can use {player} placeholder.
   balance-title: "&a=========&9Your balance&a========="
   balance-other-title: "&a=========&9{player}'s balance&a========="
+  # This messages section can use {player}, {currency}, {icon} and {amount} placeholders.
   balance: "&9{currency} &8- &6{amount}"
   balance-other: "&9{currency} &8- &6{amount}"
 
+  # Error messages
+  # This messages section can use {player}, {currency}, {icon} and {amount} placeholders.
+  no-permission: "&cYou don't have permission to use this command!"
   no-player-specified: "&cYou must specify a player!"
   not-online: "&cPlayer &6{player} &cis not online!"
   not-found: "&cPlayer &6{player} &cnot found!"
   negative-amount: "&cYou can't use negative amount!"
   not-enough-money: "&cYou don't have enough money!"
+  not-enough-to-take: "&c{player} doesn't have enough money to take ({amount} {currency})"
 
+  # Success messages
+  # This messages section can use {player}, {currency}, {icon} and {amount} placeholders.
   give-message: "&9You gave &6{amount} {currency} &9to &6{player}&9!"
   set-message: "&9You set &6{player}'s &9balance to &6{amount} {currency}&9!"
   take-message: "&9You took &6{amount} {currency} &9from &6{player}&9!"
-  not-enough-to-take: "&c{player} doesn't have enough money to take ({amount} {currency})"
 
+  # Pay command messages
+  # This messages section can use {player}, {currency}, {icon} and {amount} placeholders.
   pay-message: "&9You paid &6{amount} {currency} &9to &6{player}&9!"
   received-message: "&6{player} &9paid you &6{amount} {currency}&9!"
 
+  # Currency command messages
+    # This messages section can use {currency}, {icon} placeholders.
   currency-created: "&9Created new currency &6{currency} &a({icon})&9!"
   currency-already-exists: "&cCurrency &6{currency} &calready exists!"
   currency-not-exists: "&cCurrency &6{currency} &cnot exists!"

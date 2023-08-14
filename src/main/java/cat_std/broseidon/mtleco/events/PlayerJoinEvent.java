@@ -2,6 +2,7 @@ package cat_std.broseidon.mtleco.events;
 
 import cat_std.broseidon.mtleco.MultiEco;
 import cat_std.broseidon.mtleco.economy.EconomyImplementer;
+import cat_std.broseidon.mtleco.utils.ColorCode;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -46,8 +47,7 @@ public class PlayerJoinEvent implements Listener {
         //Nếu file không tồn tại thì tạo file mới (Dữ liệu người chơi không tồn tại)
         if (!playerDataFile.exists()) {
             try {
-                //TODO: Change message to message.yml
-                Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Data not found! Created data file for " + player.getName());
+                Bukkit.getConsoleSender().sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getPlayerDataNotFound(), player.getName(), "", "", 0)));
                 playerDataFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -77,8 +77,7 @@ public class PlayerJoinEvent implements Listener {
             playerDataConfig.set(missingCurrency, null);
         }
 
-        //TODO: Change message to message.yml
-        Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "Loaded currencies data for " + ChatColor.YELLOW + player.getName());
+        Bukkit.getConsoleSender().sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getPlayerDataLoaded(), player.getName(), "", "", 0)));
 
         //Lưu file dữ liệu của người chơi
         try {

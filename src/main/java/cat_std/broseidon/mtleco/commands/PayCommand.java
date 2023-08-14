@@ -2,6 +2,7 @@ package cat_std.broseidon.mtleco.commands;
 
 import cat_std.broseidon.mtleco.MultiEco;
 import cat_std.broseidon.mtleco.economy.EconomyImplementer;
+import cat_std.broseidon.mtleco.utils.ColorCode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -28,8 +29,7 @@ public class PayCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.hasPermission("mtleco.pay")) {
-            //TODO: Change message to message.yml
-            sender.sendMessage("§cYou do not have permission to use this command.");
+            sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getNoPermission(), sender.getName(), "", "", 0)));
             return true;
         }
 
@@ -44,20 +44,17 @@ public class PayCommand implements CommandExecutor, TabCompleter {
                             if (plugin.getEconomyHandler().getEconomyImplementer(args[1]).getBalance(player) >= Double.parseDouble(args[2])) {
                                 plugin.getEconomyHandler().getEconomyImplementer(args[1]).withdrawPlayer(player, Double.parseDouble(args[2]));
                                 plugin.getEconomyHandler().getEconomyImplementer(args[1]).depositPlayer(target, Double.parseDouble(args[2]));
-                                //TODO: Change message to message.yml
-                                player.sendMessage("§aYou have sent §e" + args[2] + " " + plugin.getEconomyHandler().getEconomyImplementer(args[1]).getName() + "§a to §e" + target.getName() + "§a.");
-                                target.sendMessage("§aYou have received §e" + args[2] + " " + plugin.getEconomyHandler().getEconomyImplementer(args[1]).getName() + "§a from §e" + player.getName() + "§a.");
+
+                                player.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getPayMessage(), target.getName(), plugin.getEconomyHandler().getEconomyImplementer(args[1]).getName(), plugin.getEconomyHandler().getEconomyImplementer(args[1]).getIcon(), Integer.parseInt(args[2]))));
+                                target.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getReceivedMessage(), player.getName(), plugin.getEconomyHandler().getEconomyImplementer(args[1]).getName(), plugin.getEconomyHandler().getEconomyImplementer(args[1]).getIcon(), Integer.parseInt(args[2]))));
                             } else {
-                                //TODO: Change message to message.yml
-                                player.sendMessage("§cYou do not have enough money.");
+                                player.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getNotEnoughMoney(), player.getName(), plugin.getEconomyHandler().getEconomyImplementer(args[1]).getName(), plugin.getEconomyHandler().getEconomyImplementer(args[1]).getIcon(), Integer.parseInt(args[2]))));
                             }
                         } else {
-                            //TODO: Change message to message.yml
-                            player.sendMessage("§cThe currency does not exist.");
+                            player.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getCurrencyNotExists(), player.getName(), args[1], args[1], Integer.parseInt(args[2]))));
                         }
                     } else {
-                        //TODO: Change message to message.yml
-                        player.sendMessage("§cThe target is not online.");
+                        player.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getNotOnline(), args[0], args[1], args[1], Integer.parseInt(args[2]))));
                     }
                 }
             }
@@ -84,6 +81,14 @@ public class PayCommand implements CommandExecutor, TabCompleter {
             for (EconomyImplementer economyImplementer : plugin.getEconomyHandler().getEconomyImplementers()) {
                 tabComplete.add(economyImplementer.getId());
             }
+        } else if (args.length == 3) {
+            tabComplete.add("1");
+            tabComplete.add("10");
+            tabComplete.add("100");
+            tabComplete.add("1000");
+            tabComplete.add("10000");
+            tabComplete.add("100000");
+            tabComplete.add("1000000");
         }
         return tabComplete;
     }

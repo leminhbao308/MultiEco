@@ -6,14 +6,19 @@ import cat_std.broseidon.mtleco.economy.EconomyHandler;
 import cat_std.broseidon.mtleco.economy.EconomyImplementer;
 import cat_std.broseidon.mtleco.events.PlayerJoinEvent;
 import cat_std.broseidon.mtleco.events.PlayerLeaveEvent;
+import cat_std.broseidon.mtleco.utils.ColorCode;
+import cat_std.broseidon.mtleco.utils.MessageManager;
 import cat_std.broseidon.mtleco.utils.VaultHook;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +33,7 @@ public final class MultiEco extends JavaPlugin {
     private VaultHook vaultHook;
 
     private File dataPackage;
+    private MessageManager messageManager;
 
     @Override
     public void onEnable() {
@@ -59,14 +65,13 @@ public final class MultiEco extends JavaPlugin {
         if (!configFile.exists()) {
             getConfig().options().copyDefaults();
             saveDefaultConfig();
-            configFile = new File(pluginFolder, "config.yml");
         }
         //Tạo thư mục data
         dataPackage = new File(pluginFolder, "data");
         if (!dataPackage.exists()) {
             dataPackage.mkdir();
         }
-
+        messageManager = new MessageManager(getConfig());
         Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "Data loaded");
         Bukkit.getConsoleSender().sendMessage("=====================================");
     }
@@ -116,8 +121,61 @@ public final class MultiEco extends JavaPlugin {
         vaultHook.unhook();
     }
 
+    @Override
+    public void reloadConfig() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            File playerDataFile = new File(this.dataPackage, player.getUniqueId().toString() + ".yml");
+            YamlConfiguration playerDataConfig = YamlConfiguration.loadConfiguration(playerDataFile);
+
+            for (EconomyImplementer currency : this.economyHandler.getEconomyImplementers()) {
+                double balance = currency.getBalance(player);
+                playerDataConfig.set(currency.getId(), balance);
+            }
+
+            // Remove non-existent currencies from the data
+            removeNonExistCurrency(playerDataFile, playerDataConfig);
+        }
+
+        super.reloadConfig();
+        loadEconomyHandler(getConfig());
+        messageManager = new MessageManager(getConfig());
+        if (vaultHook != null) {
+            vaultHook.unhook();
+            vaultHook.hook();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                File playerDataFile = new File(this.dataPackage, player.getUniqueId().toString() + ".yml");
+                YamlConfiguration playerDataConfig = YamlConfiguration.loadConfiguration(playerDataFile);
+
+                for (EconomyImplementer currency : this.economyHandler.getEconomyImplementers()) {
+                    currency.setBalance(player, playerDataConfig.getDouble(currency.getId()));
+                }
+
+                // Remove non-existent currencies from the data
+                removeNonExistCurrency(playerDataFile, playerDataConfig);
+            }
+        }
+    }
+
+    private void removeNonExistCurrency(File playerDataFile, YamlConfiguration playerDataConfig) {
+        for (String currencyId : playerDataConfig.getKeys(false)) {
+            if (this.economyHandler.getEconomyImplementer(currencyId) == null) {
+                playerDataConfig.set(currencyId, null);
+            }
+        }
+
+        try {
+            playerDataConfig.save(playerDataFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public File getDataPackage() {
         return dataPackage;
+    }
+
+    public MessageManager getMessageManager() {
+        return messageManager;
     }
 
     public EconomyHandler getEconomyHandler() {

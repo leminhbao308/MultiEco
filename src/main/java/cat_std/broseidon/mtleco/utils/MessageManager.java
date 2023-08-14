@@ -9,27 +9,31 @@ public class MessageManager {
         this.config = config;
     }
 
+    private String getPrefix() {
+        return config.getString("prefix");
+    }
+
     public String getPlayerDataNotFound() {
-        return config.getString("messages.player-data-not-found");
+        return getPrefix() + config.getString("messages.player-data-not-found");
     }
 
     public String getPlayerDataLoaded() {
-        return config.getString("messages.player-data-loaded");
+        return getPrefix() + config.getString("messages.player-data-loaded");
     }
 
     public String getPlayerDataSaved() {
-        return config.getString("messages.player-data-saved");
+        return getPrefix() + config.getString("messages.player-data-saved");
     }
 
     public String getNoPermission() {
-        return config.getString("messages.no-permission");
+        return getPrefix() + config.getString("messages.no-permission");
     }
 
     public String getConfigReloaded() {
-        return config.getString("messages.config-reloaded");
+        return getPrefix() + config.getString("messages.config-reloaded");
     }
 
-    public String getBanlanceTitle() {
+    public String getBalanceTitle() {
         return config.getString("messages.balance-title");
     }
 
@@ -46,70 +50,70 @@ public class MessageManager {
     }
 
     public String getNoPlayerSpecified() {
-        return config.getString("messages.no-player-specified");
+        return getPrefix() + config.getString("messages.no-player-specified");
     }
 
     public String getNotOnline() {
-        return config.getString("messages.not-online");
+        return getPrefix() + config.getString("messages.not-online");
     }
 
     public String getNotFound() {
-        return config.getString("messages.not-found");
+        return getPrefix() + config.getString("messages.not-found");
     }
 
     public String getNegativeAmount() {
-        return config.getString("messages.negative-amount");
+        return getPrefix() + config.getString("messages.negative-amount");
     }
 
     public String getNotEnoughMoney() {
-        return config.getString("messages.not-enough-money");
+        return getPrefix() + config.getString("messages.not-enough-money");
     }
 
     public String getGiveMessage() {
-        return config.getString("messages.give-message");
+        return getPrefix() + config.getString("messages.give-message");
     }
 
     public String getSetMessage() {
-        return config.getString("messages.set-message");
+        return getPrefix() + config.getString("messages.set-message");
     }
 
     public String getTakeMessage() {
-        return config.getString("messages.take-message");
+        return getPrefix() + config.getString("messages.take-message");
     }
 
     public String getNotEnoughToTake() {
-        return config.getString("messages.not-enough-to-take");
+        return getPrefix() + config.getString("messages.not-enough-to-take");
     }
 
     public String getPayMessage() {
-        return config.getString("messages.pay-message");
+        return getPrefix() + config.getString("messages.pay-message");
     }
 
     public String getReceivedMessage() {
-        return config.getString("messages.received-message");
+        return getPrefix() + config.getString("messages.received-message");
     }
 
     public String getCurrencyCreated() {
-        return config.getString("messages.currency-created");
+        return getPrefix() + config.getString("messages.currency-created");
     }
 
     public String getCurrencyAlreadyExists() {
-        return config.getString("messages.currency-already-exists");
+        return getPrefix() + config.getString("messages.currency-already-exists");
     }
 
     public String getCurrencyDeleted() {
-        return config.getString("messages.currency-deleted");
+        return getPrefix() + config.getString("messages.currency-deleted");
     }
 
     public String getCurrencyNotExists() {
-        return config.getString("messages.currency-not-exists");
+        return getPrefix() + config.getString("messages.currency-not-exists");
     }
 
     public String getCurrencyIconSet() {
-        return config.getString("messages.icon-set");
+        return getPrefix() + config.getString("messages.icon-set");
     }
 
     public String getDefaultSet() {
-        return config.getString("messages.default-set");
+        return getPrefix() + config.getString("messages.default-set");
     }
 }

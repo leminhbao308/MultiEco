@@ -48,11 +48,16 @@ public class VaultHook {
     private void addEconomy(EconomyImplementer economyImplementer) {
         provider.add(economyImplementer);
         if (plugin.getConfig().getBoolean("currencies." + economyImplementer.getId() + ".default")) {
+
             Bukkit.getServicesManager().register(Economy.class, economyImplementer, plugin, ServicePriority.Highest);
-            Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI hooked to " + ChatColor.AQUA + economyImplementer.getId() + ChatColor.YELLOW + " as default currency");
+            if (plugin.getConfig().getBoolean("debug")) {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI hooked to " + ChatColor.AQUA + economyImplementer.getId() + ChatColor.YELLOW + " as default currency");
+            }
         } else {
             Bukkit.getServicesManager().register(Economy.class, economyImplementer, plugin, ServicePriority.Normal);
-            Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI hooked to " + ChatColor.AQUA + economyImplementer.getId());
+            if (plugin.getConfig().getBoolean("debug")) {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI hooked to " + ChatColor.AQUA + economyImplementer.getId());
+            }
         }
     }
 
@@ -63,7 +68,9 @@ public class VaultHook {
 
         for (Economy economy : provider) {
             Bukkit.getServicesManager().unregister(Economy.class, economy);
-            Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI unhooked from " + ChatColor.AQUA + economy.getName());
+            if (plugin.getConfig().getBoolean("debug")) {
+                Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI unhooked from " + ChatColor.AQUA + economy.getName());
+            }
         }
     }
 
@@ -74,6 +81,8 @@ public class VaultHook {
      */
     public void singleUnhook(EconomyImplementer economyImplementer) {
         Bukkit.getServicesManager().unregister(Economy.class, economyImplementer);
-        Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI unhooked from " + ChatColor.AQUA + economyImplementer.getName());
+        if (plugin.getConfig().getBoolean("debug")) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "VaultAPI unhooked from " + ChatColor.AQUA + economyImplementer.getName());
+        }
     }
 }

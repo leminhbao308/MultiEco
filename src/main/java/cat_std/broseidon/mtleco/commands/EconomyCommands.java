@@ -2,6 +2,7 @@ package cat_std.broseidon.mtleco.commands;
 
 import cat_std.broseidon.mtleco.MultiEco;
 import cat_std.broseidon.mtleco.economy.EconomyImplementer;
+import cat_std.broseidon.mtleco.utils.ColorCode;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
@@ -37,15 +38,13 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                 // RELOAD COMMAND
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (!player.hasPermission("mtleco.eco.admin.reload")) {
-                        //TODO: Change message to message.yml
-                        player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                        player.sendMessage(ColorCode.translate(plugin.getMessageManager().getNoPermission()));
                         return true;
                     }
 
                     if (args.length == 1) {
                         plugin.reloadConfig();
-                        //TODO: Change message to message.yml
-                        player.sendMessage(ChatColor.GREEN + "Reloaded config");
+                        player.sendMessage(ColorCode.translate(plugin.getMessageManager().getConfigReloaded()));
                     }
                     return true;
                 }
@@ -54,26 +53,15 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                 //BALANCE COMMAND
                 if (args[0].equalsIgnoreCase("balance")) {
                     if (!player.hasPermission("mtleco.eco.balance")) {
-                        //TODO: Change message to message.yml
-                        sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                        sender.sendMessage(ColorCode.translate(plugin.getMessageManager().getNoPermission()));
                         return true;
                     }
 
                     if (args.length == 1) {
-                        try {
-                            for (EconomyImplementer economyImplementer : plugin.getEconomyHandler().getEconomyImplementers()) {
-                                int balance = (int) economyImplementer.getBalance(player);
-                                //TODO: Change message to message.yml
-                                player.sendMessage(ChatColor.GREEN + player.getName() + " §7has §a" + balance + "§7 in their " + ChatColor.AQUA + economyImplementer.getId() + ChatColor.GREEN + " account");
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        return true;
+                        return getBalance(sender, player);
                     } else if (args.length == 2) {
                         if (!player.hasPermission("mtleco.eco.balance.others")) {
-                            //TODO: Change message to message.yml
-                            player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                            player.sendMessage(ColorCode.translate(plugin.getMessageManager().getNoPermission()));
                             return true;
                         }
 
@@ -84,8 +72,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                 //GIVE COMMAND
                 if (args[0].equalsIgnoreCase("give")) {
                     if (!player.hasPermission("mtleco.eco.admin.give")) {
-                        //TODO: Change message to message.yml
-                        player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                        player.sendMessage(ColorCode.translate(plugin.getMessageManager().getNoPermission()));
                         return true;
                     }
 
@@ -95,8 +82,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                 //SET COMMAND
                 if (args[0].equalsIgnoreCase("set")) {
                     if (!player.hasPermission("mtleco.eco.admin.set")) {
-                        //TODO: Change message to message.yml
-                        player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                        player.sendMessage(ColorCode.translate(plugin.getMessageManager().getNoPermission()));
                         return true;
                     }
 
@@ -106,8 +92,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                 //TAKE COMMAND
                 if (args[0].equalsIgnoreCase("take")) {
                     if (!player.hasPermission("mtleco.eco.admin.take")) {
-                        //TODO: Change message to message.yml
-                        player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                        player.sendMessage(ColorCode.translate(plugin.getMessageManager().getNoPermission()));
                         return true;
                     }
 
@@ -120,8 +105,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                         //CREATE COMMAND
                         if (args[1].equalsIgnoreCase("create")) {
                             if (!player.hasPermission("mtleco.eco.admin.create")) {
-                                //TODO: Change message to message.yml
-                                player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                                player.sendMessage(ColorCode.translate(plugin.getMessageManager().getNoPermission()));
                                 return true;
                             }
 
@@ -131,8 +115,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                         //DELETE COMMAND
                         if (args[1].equalsIgnoreCase("delete")) {
                             if (!player.hasPermission("mtleco.eco.admin.delete")) {
-                                //TODO: Change message to message.yml
-                                player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                                player.sendMessage(ColorCode.translate(plugin.getMessageManager().getNoPermission()));
                                 return true;
                             }
 
@@ -142,8 +125,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                         //ICON DELETE COMMAND
                         if (args[1].equalsIgnoreCase("icondel")) {
                             if (!player.hasPermission("mtleco.eco.admin.icondel")) {
-                                //TODO: Change message to message.yml
-                                player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                                player.sendMessage(ColorCode.translate(plugin.getMessageManager().getNoPermission()));
                                 return true;
                             }
 
@@ -155,8 +137,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                     if (args.length == 4) {
                         if (args[1].equalsIgnoreCase("iconset")) {
                             if (!player.hasPermission("mtleco.eco.admin.iconset")) {
-                                //TODO: Change message to message.yml
-                                player.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                                player.sendMessage(ColorCode.translate(plugin.getMessageManager().getNoPermission()));
                                 return true;
                             }
 
@@ -171,8 +152,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (args.length == 1) {
                         plugin.reloadConfig();
-                        //TODO: Change message to message.yml
-                        sender.sendMessage(ChatColor.GREEN + "Reloaded config");
+                        sender.sendMessage(ColorCode.translate(plugin.getMessageManager().getConfigReloaded()));
                     }
                     return true;
                 }
@@ -181,7 +161,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                 if (args[0].equalsIgnoreCase("balance")) {
 
                     if (args.length == 1) {
-                        sender.sendMessage(ChatColor.RED + "You must specify a player");
+                        sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getNoPlayerSpecified(), "", "", "", 0)));
                         return false;
                     } else if (args.length == 2) {
                         return getOtherBalance(sender, args);
@@ -234,6 +214,19 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
         return true;
     }
 
+    private boolean getBalance(CommandSender sender, Player player) {
+        try {
+            sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getBalanceTitle(), player.getName(), "", "", 0)));
+            for (EconomyImplementer economyImplementer : plugin.getEconomyHandler().getEconomyImplementers()) {
+                int balance = (int) economyImplementer.getBalance(player);
+                sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getBalanceDisplay(), player.getName(), economyImplementer.getName(), economyImplementer.getIcon(), balance)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
     private boolean givePlayerBalance(CommandSender sender, String[] args) {
         if (args.length == 4) {
             try {
@@ -242,14 +235,12 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                 int amount = Integer.parseInt(args[3]);
 
                 if (target == null) {
-                    //TODO: Change message to message.yml
-                    sender.sendMessage(ChatColor.RED + "Player not found");
+                    sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getNotFound(), args[1], "", "", 0)));
                     return false;
                 }
 
                 plugin.getEconomyHandler().getEconomyImplementer(economyID).depositPlayer(target, amount);
-                //TODO: Change message to message.yml
-                sender.sendMessage(ChatColor.GRAY + "You have give §a" + amount + "§7 into §a" + target.getName() + "'s " + economyID + " §7account");
+                sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getGiveMessage(), target.getName(), economyID, plugin.getEconomyHandler().getEconomyImplementer(economyID).getIcon(), amount)));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -266,20 +257,17 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                 int amount = Integer.parseInt(args[3]);
 
                 if (target == null) {
-                    //TODO: Change message to message.yml
-                    sender.sendMessage(ChatColor.RED + "Player not found");
+                    sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getNotFound(), args[1], "", "", 0)));
                     return false;
                 }
 
                 if (amount < 0) {
-                    //TODO: Change message to message.yml
-                    sender.sendMessage(ChatColor.RED + "You cannot set a negative amount");
+                    sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getNegativeAmount(), args[1], "", "", 0)));
                     return false;
                 }
 
                 plugin.getEconomyHandler().getEconomyImplementer(economyID).setBalance(target, amount);
-                //TODO: Change message to message.yml
-                sender.sendMessage(ChatColor.GRAY + "You have set §a" + target.getName() + "'s " + economyID + " §7account to §a" + amount);
+                sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getSetMessage(), target.getName(), economyID, plugin.getEconomyHandler().getEconomyImplementer(economyID).getIcon(), amount)));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -296,20 +284,17 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                 int amount = Integer.parseInt(args[3]);
 
                 if (target == null) {
-                    //TODO: Change message to message.yml
-                    sender.sendMessage(ChatColor.RED + "Player not found");
+                    sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getNotFound(), args[1], "", "", 0)));
                     return false;
                 }
 
                 if (plugin.getEconomyHandler().getEconomyImplementer(economyID).getBalance(target) < amount) {
-                    //TODO: Change message to message.yml
-                    sender.sendMessage(ChatColor.RED + "You cannot withdraw more than you have in your account (" + ChatColor.AQUA + plugin.getEconomyHandler().getEconomyImplementer(economyID).getBalance(target) + ChatColor.RED + ")");
+                    sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getNotEnoughToTake(), args[1], economyID, plugin.getEconomyHandler().getEconomyImplementer(economyID).getIcon(), amount)));
                     return false;
                 }
 
                 plugin.getEconomyHandler().getEconomyImplementer(economyID).withdrawPlayer(target, amount);
-                //TODO: Change message to message.yml
-                sender.sendMessage(ChatColor.GRAY + "You have withdrawn §a$" + amount + "§7 from §a" + target.getName() + "'s " + economyID + " §7account");
+                sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getTakeMessage(), target.getName(), economyID, plugin.getEconomyHandler().getEconomyImplementer(economyID).getIcon(), amount)));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -321,20 +306,10 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
     private boolean getOtherBalance(CommandSender sender, String[] args) {
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
-            //TODO: Change message to message.yml
-            sender.sendMessage(ChatColor.RED + "Player not found");
+            sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getNotFound(), args[1], "", "", 0)));
             return false;
         }
-        try {
-            for (EconomyImplementer economyImplementer : plugin.getEconomyHandler().getEconomyImplementers()) {
-                int balance = (int) economyImplementer.getBalance(target);
-                //TODO: Change message to message.yml
-                sender.sendMessage(ChatColor.GREEN + target.getName() + " §7has §a" + balance + "§7 in their " + ChatColor.AQUA + economyImplementer.getId() + ChatColor.GREEN + " account");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return true;
+        return getBalance(sender, target);
     }
 
     private boolean createCurrency(CommandSender sender, String[] args) {
@@ -349,8 +324,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
             if (!configSection.isConfigurationSection(economyID)) {
                 plugin.getEconomyHandler().addEconomyImplementer(economyImplementer); // Add to EconomyHandler
                 plugin.getVaultHook().singleHook(economyImplementer); // Hook into Vault
-                //TODO: Change message to message.yml
-                sender.sendMessage(ChatColor.GRAY + "You have created a new economy called " + ChatColor.AQUA + economyImplementer.getIcon());
+                sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getCurrencyCreated(), "", economyID, economyImplementer.getIcon(), 0)));
 
                 // Create a section for the new currency
                 ConfigurationSection currencySection = configSection.createSection(economyID);
@@ -362,8 +336,7 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                 plugin.saveConfig();
                 plugin.reloadConfig();
             } else {
-                //TODO: Change message to message.yml
-                sender.sendMessage(ChatColor.RED + "Economy already exists");
+                sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getCurrencyAlreadyExists(), "", economyID, economyImplementer.getIcon(), 0)));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -384,15 +357,13 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
                 configSection.set(economyID, null); // Remove the currency section
                 plugin.getEconomyHandler().removeEconomyImplementer(economyImplementer); // Remove from EconomyHandler
                 plugin.getVaultHook().singleUnhook(economyImplementer); // Unhook from Vault
-                //TODO: Change message to message.yml
-                sender.sendMessage(ChatColor.GRAY + "You have deleted the economy called " + ChatColor.AQUA + economyID);
+                sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getCurrencyDeleted(), "", economyID, economyImplementer.getIcon(), 0)));
 
                 // Save the updated configuration
                 plugin.saveConfig();
                 plugin.reloadConfig();
             } else {
-                //TODO: Change message to message.yml
-                sender.sendMessage(ChatColor.RED + "Economy does not exist");
+                sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getCurrencyNotExists(), "", economyID, economyID, 0)));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -411,15 +382,13 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
             if (economyImplementer != null) {
                 config.set("currencies." + economyID + ".icon", economyID);
                 economyImplementer.setIcon(economyID);
-                //TODO: Change message to message.yml
-                sender.sendMessage(ChatColor.GRAY + "You have set the icon for the economy called " + ChatColor.AQUA + economyID);
+                sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getDefaultSet(), "", economyID, economyImplementer.getIcon(), 0)));
 
                 // Save the updated configuration
                 plugin.saveConfig();
                 plugin.reloadConfig();
             } else {
-                //TODO: Change message to message.yml
-                sender.sendMessage(ChatColor.RED + "Economy does not exist");
+                sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getCurrencyNotExists(), "", economyID, economyID, 0)));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -439,15 +408,13 @@ public class EconomyCommands implements CommandExecutor, TabCompleter {
             if (economyImplementer != null) {
                 config.set("currencies." + economyID + ".icon", icon);
                 economyImplementer.setIcon(icon);
-                //TODO: Change message to message.yml
-                sender.sendMessage(ChatColor.GRAY + "You have set the icon for the economy called " + ChatColor.AQUA + economyID);
+                sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getCurrencyIconSet(), "", economyID, economyImplementer.getIcon(), 0)));
 
                 // Save the updated configuration
                 plugin.saveConfig();
                 plugin.reloadConfig();
             } else {
-                //TODO: Change message to message.yml
-                sender.sendMessage(ChatColor.RED + "Economy does not exist");
+                sender.sendMessage(ColorCode.translate(ColorCode.autoReplace(plugin.getMessageManager().getCurrencyNotExists(), "", economyID, economyID, 0)));
             }
         } catch (Exception e) {
             e.printStackTrace();
